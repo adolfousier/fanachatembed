@@ -1,7 +1,7 @@
 {
-  "name": "flowise-embed",
-  "version": "1.3.14",
-  "description": "Javascript library to display flowise chatbot on your website",
+  "name": "fana-embed",
+  "version": "0.2.0",
+  "description": "Javascript library to display Fana chatbot on your website",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
