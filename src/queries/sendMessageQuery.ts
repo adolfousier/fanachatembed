@@ -66,7 +66,7 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:8080', bod
 export const sendMessageQuery = ({ apiHost = 'http://localhost:8080', apiKey = process.env.API_KEY, body }: MessageRequest) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${apiHost}/api/v1/prediction`,
+    url: `${apiHost}/api/prediction`,
     headers: {
       'X-API-KEY': apiKey,
     },
