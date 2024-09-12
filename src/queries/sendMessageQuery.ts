@@ -63,13 +63,10 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:8080', bod
     body,
   });
 
-export const sendMessageQuery = ({ apiHost = 'http://localhost:8080', apiKey = process.env.API_KEY, body }: MessageRequest) =>
+export const sendMessageQuery = ({ apiHost = 'http://localhost:8080', body }: MessageRequest) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${apiHost}/api/prediction`,
-    headers: {
-      'X-API-KEY': apiKey,
-    },
+    url: `${apiHost}/api/prediction/interact`,
     body,
   } as RequestOptions);
 
