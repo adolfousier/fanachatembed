@@ -55,7 +55,7 @@ export declare const updateFeedbackQuery: ({ id, apiHost, body, onRequest }: Upd
     data?: unknown;
     error?: Error | undefined;
 }>;
-export declare const sendMessageQuery: ({ chatflowid, apiHost, body, onRequest }: MessageRequest) => Promise<{
+export declare const sendMessageQuery: ({ body, apiHost }: any) => Promise<{
     data?: any;
     error?: Error | undefined;
 }>;
