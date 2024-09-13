@@ -67,7 +67,7 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', bod
 export const sendMessageQuery = ({ body, isConvNew, baseUrl }: any) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${baseUrl}api/prediction/interact?newConversation=${isConvNew}`,
+    url: `${baseUrl}api/prediction/proxy/interact?newConversation=${isConvNew}`,
     body,
   });
 
