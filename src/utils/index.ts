@@ -13,32 +13,16 @@ export const sendRequest = async <ResponseData>(
         method: string;
         body?: Record<string, unknown> | FormData;
         type?: string;
-        headers?: Record<string, string>;
-        formData?: FormData;
-        onRequest?: (request: RequestInit) => Promise<void>;
       }
     | string,
 ): Promise<{ data?: ResponseData; error?: Error }> => {
   try {
     const url = typeof params === 'string' ? params : params.url;
-    const headers = typeof params !== 'string' && params.headers ? params.headers : undefined;
-
-    const formData = new FormData();
-    formData.append('question', 'my question');
-
-    const requestInfo: RequestInit = {
+    const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
       mode: 'cors',
-      headers,
-      body: formData,
-    };
-
-    if (typeof params !== 'string' && params.onRequest) {
-      await params.onRequest(requestInfo);
-    }
-
-    const response = await fetch(url, requestInfo);
-
+      body: typeof params !== 'string' && isDefined(params.body) ? (params.body as FormData) : undefined,
+    });
     let data: any;
     const contentType = response.headers.get('Content-Type');
     if (contentType && contentType.includes('application/json')) {
@@ -48,6 +32,7 @@ export const sendRequest = async <ResponseData>(
     } else {
       data = await response.text();
     }
+
     if (!response.ok) {
       let errorMessage;
 
