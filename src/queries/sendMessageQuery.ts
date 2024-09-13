@@ -75,21 +75,20 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', bod
     onRequest: onRequest,
   });
 
-export const sendMessageQuery = ({ body, apiHost = 'http://localhost:3000' }: any) =>
+export const sendMessageQuery = ({ body, apiHost = 'http://localhost:3000', onRequest }: any) =>
   sendRequest<any>({
     method: 'POST',
     url: `${apiHost}/api/prediction/proxy/interact`,
-    body,
+    body: new FormData(body),
+    onRequest: onRequest,
   });
 
 export const upsertVectorStoreWithFormData = ({ chatflowid, apiHost = 'http://localhost:3000', formData, onRequest }: UpsertRequest) =>
   sendRequest({
     method: 'POST',
     url: `${apiHost}/api/v1/vector/upsert/${chatflowid}`,
-    formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    body: formData as FormData,
+
     onRequest: onRequest,
   });
 

@@ -13,6 +13,7 @@ export const sendRequest = async <ResponseData>(
         method: string;
         body?: Record<string, unknown> | FormData;
         type?: string;
+        onRequest?: (request: RequestInit) => Promise<void>;
       }
     | string,
 ): Promise<{ data?: ResponseData; error?: Error }> => {
@@ -21,7 +22,12 @@ export const sendRequest = async <ResponseData>(
     const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
       mode: 'cors',
-      body: typeof params !== 'string' && isDefined(params.body) ? (params.body as FormData) : undefined,
+      body:
+        typeof params !== 'string' && isDefined(params.body)
+          ? params.body instanceof FormData
+            ? params.body
+            : JSON.stringify(params.body)
+          : undefined,
     });
     let data: any;
     const contentType = response.headers.get('Content-Type');
