@@ -198,9 +198,7 @@ export const BotBubble = (props: Props) => {
   }
 
   return (
-    <div
-      class="flex flex-row items-start lg:mr-5 md:mr-5 justify-start mb-2 bg-[#272727] p-4 rounded-xl host-container"
-    >
+    <div class="flex flex-row items-start lg:mr-5 md:mr-5 justify-start mb-2 bg-[#272727] p-4 rounded-xl host-container">
       <Show when={true}>
         <>
           <Avatar initialAvatarSrc={'/ai-avatar.svg'} />

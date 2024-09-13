@@ -26,13 +26,12 @@ interface IPredefinedPromptsProps {
 export const InitialScreen = (props: IPredefinedPromptsProps) => {
   return (
     <div class="mt-8 md:pr-4 flex w-full lg:h-screen md:h-screen lg:overflow-y-visible overflow-y-scroll flex-col items-center gap-4 lg:w-12/12">
-      <img src="/stars.svg" width={70} height={70} alt="starts" />
-      <p class="bg-gradient-to-r from-[#FF4646] via-[#FF7246] to-[#FECE00] bg-clip-text text-center text-[28px] font-bold text-transparent lg:text-[32px]">
-        Hello! I&apos;m AImagine Creator Tool assistant.
+      <img src="/bot-avatar.png" width={70} height={70} alt="starts" />
+      <p class="bg-gradient-to-r from-[#007A5A] via-[#007A5A] to-[#00B786] bg-clip-text text-center text-[28px] font-bold text-transparent lg:text-[32px]">
+        Hello! I&apos;m FANA, your AI companion.
       </p>
       <p class="max-w-[600px] text-center text-sm text-white">
-        I&apos;m here to bring your imagination to life, transforming your words into stunning visuals. Whether it&apos;s a serene landscape, a
-        bustling cityscape, or something entirely unique, just describe your vision and let me craft the perfect image for you.
+        I&apos;m here to revolutionize interactions with intelligent, user-friendly, and efficient AI solutions. 🤓 How may I assist you today?"
       </p>
       <p class="text-sm font-extrabold">Ready to get started?</p>
       <div class="mt-6 grid lg:grid-cols-4 gap-2 lg:flex lg:justify-center grid-cols-2">
