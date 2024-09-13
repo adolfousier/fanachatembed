@@ -7,7 +7,7 @@ export const ThumbsUpIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
     width="24"
     height="24"
     viewBox="0 0 24 24"
-    fill="none"
+    fill={props.color ?? 'none'}
     stroke={props.color ?? defaultButtonColor}
     stroke-width="2"
     stroke-linecap="round"

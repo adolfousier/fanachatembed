@@ -1,7 +1,6 @@
 type Props = {
   prompt: string;
   onPromptClick?: () => void;
-  starterPromptFontSize?: number;
 };
 export const StarterPromptBubble = (props: Props) => (
   <>
@@ -16,7 +15,7 @@ export const StarterPromptBubble = (props: Props) => (
         data-testid="host-bubble"
         style={{
           width: 'max-content',
-          'font-size': props.starterPromptFontSize ? `${props.starterPromptFontSize}px` : '15px', // Convert to string with unit
+          'font-size': '15px',
           'border-radius': '15px',
           cursor: 'pointer',
         }}

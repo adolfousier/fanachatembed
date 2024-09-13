@@ -11,13 +11,9 @@ type Props = {
     onSubmit: (value: string) => void;
     uploadsConfig?: Partial<UploadsConfig>;
     setPreviews: Setter<unknown[]>;
+    previews?: any;
     onMicrophoneClicked: () => void;
     handleFileChange: (event: FileEvent<HTMLInputElement>) => void;
-    maxChars?: number;
-    maxCharsWarningMessage?: string;
-    autoFocus?: boolean;
-    sendMessageSound?: boolean;
-    sendSoundLocation?: string;
 };
 export declare const TextInput: (props: Props) => import("solid-js").JSX.Element;
 export {};
