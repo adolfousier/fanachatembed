@@ -59,7 +59,7 @@ export declare const sendMessageQuery: ({ body, apiHost, onRequest }: any) => Pr
     data?: any;
     error?: Error | undefined;
 }>;
-export declare const upsertVectorStoreWithFormData: ({ chatflowid, apiHost, formData, onRequest }: UpsertRequest) => Promise<{
+export declare const upsertVectorStoreWithFormData: ({ chatflowid, apiHost, onRequest }: UpsertRequest) => Promise<{
     data?: unknown;
     error?: Error | undefined;
 }>;
