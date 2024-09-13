@@ -23,24 +23,14 @@ export const sendRequest = async <ResponseData>(
     const url = typeof params === 'string' ? params : params.url;
     const headers = typeof params !== 'string' && params.headers ? params.headers : undefined;
 
+    const formData = new FormData();
+    formData.append('question', 'my question');
+
     const requestInfo: RequestInit = {
       method: typeof params === 'string' ? 'GET' : params.method,
       mode: 'cors',
       headers,
-      body:
-        typeof params !== 'string' && params.body
-          ? params.body instanceof FormData
-            ? params.body
-            : Object.keys(params.body as Record<string, unknown>).reduce((formData, key) => {
-                if (key !== 'chatId' && params.body && key in params.body) {
-                  const value = (params.body as Record<string, unknown>)[key];
-                  if (typeof value === 'string' || value instanceof Blob) {
-                    formData.append(key, value);
-                  }
-                }
-                return formData;
-              }, new FormData())
-          : undefined,
+      body: formData,
     };
 
     if (typeof params !== 'string' && params.onRequest) {
