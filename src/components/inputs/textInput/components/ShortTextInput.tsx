@@ -42,8 +42,8 @@ export const ShortTextInput = (props: ShortTextInputProps) => {
   return (
     <textarea
       ref={props.ref}
-      class="focus:outline-none bg-transparent px-4 py-4 flex-1 w-full h-full min-h-[56px] max-h-[128px] text-input disabled:opacity-50 disabled:cursor-not-allowed disabled:brightness-100 "
-      disabled={props.disabled}
+      class="focus:outline-none bg-transparent px-4 py-4 flex-1 w-full h-full min-h-[56px] max-h-[128px] text-input"
+      disabled={props.disabled !== undefined ? props.disabled : false}
       style={{
         'font-size': props.fontSize ? `${props.fontSize}px` : '16px',
         resize: 'none',
