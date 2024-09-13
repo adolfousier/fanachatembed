@@ -1,6 +1,6 @@
+import { MessageType } from '../Bot';
 type Props = {
-    message: any;
-    messages: any;
+    message: MessageType;
     apiHost?: string;
     chatflowid: string;
     chatId: string;
@@ -9,7 +9,6 @@ type Props = {
     backgroundColor?: string;
     textColor?: string;
     fontSize?: number;
-    userUploadedImageUrl: any;
 };
 export declare const GuestBubble: (props: Props) => import("solid-js").JSX.Element;
 export {};

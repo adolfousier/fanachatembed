@@ -1,6 +1,8 @@
-import { onCleanup, onMount } from 'solid-js';
+import { FooterTheme } from '@/features/bubble/types';
+import { Show, onCleanup, onMount } from 'solid-js';
 
 type Props = {
+  footer?: FooterTheme;
   botContainer: HTMLDivElement | undefined;
   poweredByTextColor?: string;
   badgeBackgroundColor?: string;
@@ -16,6 +18,7 @@ export const Badge = (props: Props) => {
     mutations.forEach((mutation) => {
       mutation.removedNodes.forEach((removedNode) => {
         if ('id' in removedNode && liteBadge && removedNode.id == 'lite-badge') {
+          console.log("Sorry, you can't remove the brand 😅");
           props.botContainer?.append(liteBadge);
         }
       });
@@ -36,24 +39,38 @@ export const Badge = (props: Props) => {
   });
 
   return (
-    <span
-      class="w-full text-center px-[10px] pt-[6px] pb-[10px] m-auto bg-[#363636] text-[13px]"
-      style={{
-        color: 'white',
-      }}
-    >
-      Powered by
-      <a
-        ref={liteBadge}
-        href={'https://fana.ai'}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="lite-badge"
-        id="lite-badge"
-        style={{ 'font-weight': 'bold', color: 'white', 'margin-left': '4px' }}
-      >
-        <span>Fana AI</span>
-      </a>
-    </span>
+    <>
+      <Show when={props.footer?.showFooter === undefined || props.footer?.showFooter === null || props.footer?.showFooter === true}>
+        <span
+          class="w-full text-center px-[10px] pt-[6px] pb-[10px] m-auto text-[13px]"
+          style={{
+            color: props.footer?.textColor ?? props.poweredByTextColor ?? defaultTextColor,
+            'background-color': props.badgeBackgroundColor ?? '#ffffff',
+          }}
+        >
+          {props.footer?.text ?? 'Powered by'}
+          <a
+            ref={liteBadge}
+            href={props.footer?.companyLink ?? 'https://flowiseai.com'}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lite-badge"
+            id="lite-badge"
+            style={{ 'font-weight': 'bold', color: props.footer?.textColor ?? props.poweredByTextColor ?? defaultTextColor }}
+          >
+            <span>&nbsp;{props.footer?.company ?? 'Flowise'}</span>
+          </a>
+        </span>
+      </Show>
+      <Show when={props.footer?.showFooter === false}>
+        <span
+          class="w-full text-center px-[10px] pt-[6px] pb-[10px] m-auto text-[13px]"
+          style={{
+            color: props.footer?.textColor ?? props.poweredByTextColor ?? defaultTextColor,
+            'background-color': props.badgeBackgroundColor ?? '#ffffff',
+          }}
+        />
+      </Show>
+    </>
   );
 };
