@@ -13,7 +13,7 @@ export const sendRequest = async <ResponseData>(
         method: string;
         body?: Record<string, unknown> | FormData;
         type?: string;
-        headers?: Record<string, any>;
+        headers?: Record<string, string>;
         formData?: FormData;
         onRequest?: (request: RequestInit) => Promise<void>;
       }
@@ -22,20 +22,19 @@ export const sendRequest = async <ResponseData>(
   try {
     const url = typeof params === 'string' ? params : params.url;
     const headers =
-      typeof params !== 'string' && isDefined(params.body)
+      typeof params !== 'string' && params.body
         ? {
-            'Content-Type': 'application/json',
+            ...(params.body instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'application/json' }),
             ...params.headers,
           }
         : undefined;
-    let body: string | FormData | undefined = typeof params !== 'string' && isDefined(params.body) ? JSON.stringify(params.body) : undefined;
-    if (typeof params !== 'string' && params.formData) body = params.formData;
+    const body = typeof params !== 'string' && params.body ? params.body : undefined;
 
     const requestInfo: RequestInit = {
       method: typeof params === 'string' ? 'GET' : params.method,
       mode: 'cors',
       headers,
-      body,
+      body: body instanceof FormData ? body : JSON.stringify(body),
     };
 
     if (typeof params !== 'string' && params.onRequest) {

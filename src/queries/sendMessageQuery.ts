@@ -78,7 +78,7 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', bod
 export const sendMessageQuery = ({ body, apiHost = 'http://localhost:3000' }: any) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${apiHost}api/prediction/proxy/interact`,
+    url: `${apiHost}/api/prediction/proxy/interact`,
     body,
   });
 

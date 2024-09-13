@@ -7,7 +7,7 @@ export declare const sendRequest: <ResponseData>(params: string | {
     method: string;
     body?: Record<string, unknown> | FormData | undefined;
     type?: string | undefined;
-    headers?: Record<string, any> | undefined;
+    headers?: Record<string, string> | undefined;
     formData?: FormData | undefined;
     onRequest?: ((request: RequestInit) => Promise<void>) | undefined;
 }) => Promise<{
