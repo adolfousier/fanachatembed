@@ -27,7 +27,20 @@ export const sendRequest = async <ResponseData>(
       method: typeof params === 'string' ? 'GET' : params.method,
       mode: 'cors',
       headers,
-      body: typeof params !== 'string' && params.body ? (params.body instanceof FormData ? params.body : JSON.stringify(params.body)) : undefined,
+      body:
+        typeof params !== 'string' && params.body
+          ? params.body instanceof FormData
+            ? params.body
+            : Object.keys(params.body as Record<string, unknown>).reduce((formData, key) => {
+                if (key !== 'chatId' && params.body && key in params.body) {
+                  const value = (params.body as Record<string, unknown>)[key];
+                  if (typeof value === 'string' || value instanceof Blob) {
+                    formData.append(key, value);
+                  }
+                }
+                return formData;
+              }, new FormData())
+          : undefined,
     };
 
     if (typeof params !== 'string' && params.onRequest) {
