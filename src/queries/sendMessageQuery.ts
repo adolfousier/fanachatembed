@@ -1,8 +1,5 @@
 import { FileUpload, MessageType } from '@/components/Bot';
 import { sendRequest } from '@/utils/index';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export type IncomingInput = {
   question: string;
@@ -14,10 +11,22 @@ export type IncomingInput = {
   fileName?: string; // Only for assistant
 };
 
+export type IncomingInputV2 = {
+  text: string;
+  chat_history: MessageType[];
+  uploads?: FileUpload[];
+  overrideConfig?: Record<string, unknown>;
+  socketIOClientId?: string;
+  chatId?: string;
+  fileName?: string; // Only for assistant
+};
+
 export type MessageRequest = {
-  apiKey?: string;
+  chatflowid?: string;
   apiHost?: string;
-  body?: IncomingInput;
+  body?: any;
+  authToken?: string;
+  chatBotBEUrl?: string;
 };
 
 export type FeedbackRatingType = 'THUMBS_UP' | 'THUMBS_DOWN';
@@ -41,48 +50,40 @@ export type UpdateFeedbackRequest = {
   body?: Partial<FeedbackInput>;
 };
 
-export type RequestOptions = {
-  method: string;
-  url: string;
-  body?: Record<string, unknown> | FormData;
-  headers?: Record<string, string>;
-  type?: string;
-};
-
-export const sendFeedbackQuery = ({ apiHost = 'http://localhost:8080', body }: CreateFeedbackRequest) =>
+export const sendFeedbackQuery = ({ chatflowid, apiHost = 'http://localhost:3000', body }: CreateFeedbackRequest) =>
   sendRequest({
     method: 'POST',
-    url: `${apiHost}/api/v1/feedback/}`,
+    url: `${apiHost}/api/v1/feedback/${chatflowid}`,
     body,
   });
 
-export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:8080', body }: UpdateFeedbackRequest) =>
+export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', body }: UpdateFeedbackRequest) =>
   sendRequest({
     method: 'PUT',
     url: `${apiHost}/api/v1/feedback/${id}`,
     body,
   });
 
-export const sendMessageQuery = ({ apiHost = 'http://localhost:8080', body }: MessageRequest) =>
+export const sendMessageQuery = ({ body, isConvNew, baseUrl }: any) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${apiHost}/api/prediction/interact`,
+    url: `${baseUrl}api/prediction/interact?newConversation=${isConvNew}`,
     body,
-  } as RequestOptions);
-
-export const getChatbotConfig = ({ apiHost = 'http://localhost:8080' }: MessageRequest) =>
-  sendRequest<any>({
-    method: 'GET',
-    url: `${apiHost}/api/v1/public-chatbotConfig/`,
   });
 
-export const isStreamAvailableQuery = ({ apiHost = 'http://localhost:8080' }: MessageRequest) =>
+export const getChatbotConfig = ({ chatflowid, apiHost = 'http://localhost:3000' }: MessageRequest) =>
   sendRequest<any>({
     method: 'GET',
-    url: `${apiHost}/api/v1/chatflows-streaming/`,
+    url: `${apiHost}/api/v1/public-chatbotConfig/${chatflowid}`,
   });
 
-export const sendFileDownloadQuery = ({ apiHost = 'http://localhost:8080', body }: MessageRequest) =>
+export const isStreamAvailableQuery = ({ chatflowid, apiHost = 'http://localhost:3000' }: MessageRequest) =>
+  sendRequest<any>({
+    method: 'GET',
+    url: `${apiHost}/api/v1/chatflows-streaming/${chatflowid}`,
+  });
+
+export const sendFileDownloadQuery = ({ apiHost = 'http://localhost:3000', body }: MessageRequest) =>
   sendRequest<any>({
     method: 'POST',
     url: `${apiHost}/api/v1/openai-assistants-file`,

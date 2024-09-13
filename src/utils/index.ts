@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 export const isNotDefined = <T>(value: T | undefined | null): value is undefined | null => value === undefined || value === null;
 
 export const isDefined = <T>(value: T | undefined | null): value is NonNullable<T> => value !== undefined && value !== null;
@@ -6,8 +8,6 @@ export const isEmpty = (value: string | undefined | null): value is undefined =>
 
 export const isNotEmpty = (value: string | undefined | null): value is string => value !== undefined && value !== null && value !== '';
 
-const isFormData = (body: Record<string, unknown> | FormData): body is FormData => body instanceof FormData;
-
 export const sendRequest = async <ResponseData>(
   params:
     | {
@@ -15,81 +15,61 @@ export const sendRequest = async <ResponseData>(
         method: string;
         body?: Record<string, unknown> | FormData;
         type?: string;
+        authToken?: string;
+        contentType?: string;
       }
     | string,
 ): Promise<{ data?: ResponseData; error?: Error }> => {
   try {
     const url = typeof params === 'string' ? params : params.url;
-    const apiKey = process.env.API_KEY;
-
-    if (!apiKey) {
-      throw new Error('API key is not set in environment variables');
-    }
-
-    const headers: HeadersInit = {
-      Authorization: `Bearer ${apiKey}`,
-    };
-
-    if (typeof params !== 'string' && isDefined(params.body) && !isFormData(params.body)) {
-      headers['Content-Type'] = 'application/json';
-    }
-
-    const initialResponse = await fetch(url, {
+    const authToken = Cookies.get('jwt');
+    const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
       mode: 'cors',
-      headers,
-      body: typeof params !== 'string' && isDefined(params.body) ? (isFormData(params.body) ? params.body : JSON.stringify(params.body)) : undefined,
+      headers:
+        typeof params !== 'string' && isDefined(params.body)
+          ? {
+              Authorization: `Bearer ${authToken}`,
+            }
+          : undefined,
+      body: typeof params !== 'string' && isDefined(params.body) ? (params.body as FormData) : undefined,
     });
-
-    if (!initialResponse.ok) {
-      throw new Error(`Initial request failed: ${initialResponse.statusText}`);
+    let data: any;
+    const contentType = response.headers.get('Content-Type');
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else if (typeof params !== 'string' && params.type === 'blob') {
+      data = await response.blob();
+    } else {
+      data = await response.text();
     }
 
-    const initialData = await initialResponse.json();
-    const request_id = initialData?.request_id;
+    if (!response.ok) {
+      let errorMessage;
 
-    if (!request_id) {
-      throw new Error('No request ID received from initial request');
-    }
-
-    // Polling logic
-    const maxAttempts = 60; // 5 minutes with 5-second intervals
-    const pollInterval = 5000; // 5 seconds
-
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      await new Promise((resolve) => setTimeout(resolve, pollInterval));
-
-      const statusResponse = await fetch(`${url}/status`, {
-        method: 'GET',
-        headers: {
-          ...headers,
-          'X-Request-ID': request_id,
-        },
-      });
-
-      if (statusResponse.status === 200) {
-        // Request completed
-        let data: ResponseData | null = null;
-        const contentType = statusResponse.headers.get('Content-Type');
-        if (contentType && contentType.includes('application/json')) {
-          data = await statusResponse.json();
-        } else if (typeof params !== 'string' && params.type === 'blob') {
-          data = (await statusResponse.blob()) as ResponseData;
-        } else {
-          data = (await statusResponse.text()) as ResponseData;
-        }
-        return data ? { data } : { error: new Error('No data received') };
-      } else if (statusResponse.status === 404) {
-        throw new Error('Request not found');
-      } else if (statusResponse.status === 408) {
-        throw new Error('Request timed out');
+      if (typeof data === 'object' && 'error' in data) {
+        errorMessage = data.error;
+      } else {
+        errorMessage = data || response.statusText;
       }
-      // If status is 202, continue polling
+
+      throw errorMessage;
     }
 
-    throw new Error('Polling timed out');
+    return { data };
   } catch (e) {
     console.error(e);
     return { error: e as Error };
   }
 };
+
+export function isOneHourEarlier(timeToCheck: string) {
+  const currentTime = new Date();
+
+  const timeToCheckParsed = new Date(timeToCheck);
+
+  const oneHourEarlier = new Date(currentTime);
+  oneHourEarlier.setHours(oneHourEarlier.getHours() - 1);
+
+  return timeToCheckParsed < oneHourEarlier;
+}
