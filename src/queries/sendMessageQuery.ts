@@ -79,7 +79,10 @@ export const sendMessageQuery = ({ body, apiHost = 'http://localhost:3000', onRe
   sendRequest<any>({
     method: 'POST',
     url: `${apiHost}/api/prediction/proxy/interact`,
-    body,
+    body: Object.keys(body).reduce((formData, key) => {
+      formData.append(key, body[key]);
+      return formData;
+    }, new FormData()),
     onRequest: onRequest,
   });
 
