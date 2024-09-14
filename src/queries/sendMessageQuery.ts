@@ -74,11 +74,14 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', bod
     onRequest: onRequest,
   });
 
-export const sendMessageQuery = ({ formData, apiHost = 'http://localhost:3000', onRequest }: any) =>
+export const sendMessageQuery = ({ body, apiHost = 'http://localhost:3000', onRequest }: any) =>
   sendRequest<any>({
     method: 'POST',
     url: `${apiHost}/api/prediction/proxy/interact`,
-    body: formData,
+    body: Object.keys(body).reduce((formData, key) => {
+      formData.append(key, body[key]);
+      return formData;
+    }, new FormData()),
     onRequest: onRequest,
   });
 

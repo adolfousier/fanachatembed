@@ -52,7 +52,7 @@ export declare const updateFeedbackQuery: ({ id, apiHost, body, onRequest }: Upd
     data?: unknown;
     error?: Error | undefined;
 }>;
-export declare const sendMessageQuery: ({ formData, apiHost, onRequest }: any) => Promise<{
+export declare const sendMessageQuery: ({ body, apiHost, onRequest }: any) => Promise<{
     data?: any;
     error?: Error | undefined;
 }>;

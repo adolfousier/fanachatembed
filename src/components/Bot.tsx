@@ -511,7 +511,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       chatflowid: props.chatflowid,
       apiHost: props.apiHost,
       body,
-      formData: FormData,
       onRequest: props.onRequest,
     });
 
