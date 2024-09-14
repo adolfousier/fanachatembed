@@ -4,8 +4,8 @@ import { sendRequest } from '@/utils/index';
 export type IncomingInput = {
   question: string;
   uploads?: FileUpload[];
-  overrideConfig?: Record<string, unknown>;
-  socketIOClientId?: string;
+  //overrideConfig?: Record<string, unknown>;
+  //socketIOClientId?: string;
   fileName?: string; // Only for assistant
   leadEmail?: string;
   action?: IAction;
