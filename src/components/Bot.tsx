@@ -472,17 +472,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     if (uploads && uploads.length > 0) body.uploads = uploads;
 
-    if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig;
+    //if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig;
 
     if (leadEmail()) body.leadEmail = leadEmail();
 
     if (action) body.action = action;
 
-    if (isChatFlowAvailableToStream()) {
-      body.socketIOClientId = socketIOClientId();
-    } else {
-      setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]);
-    }
+    //if (isChatFlowAvailableToStream()) {
+    //  body.socketIOClientId = socketIOClientId();
+    //} else {
+    //  setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]);
+    //}
 
     if (uploadedFiles().length > 0) {
       const formData = new FormData();
