@@ -6,7 +6,6 @@ export type IncomingInput = {
   uploads?: FileUpload[];
   overrideConfig?: Record<string, unknown>;
   socketIOClientId?: string;
-  chatId?: string;
   fileName?: string; // Only for assistant
   leadEmail?: string;
   action?: IAction;

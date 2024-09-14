@@ -468,7 +468,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     const body: IncomingInput = {
       question: value,
-      chatId: chatId(),
     };
 
     if (uploads && uploads.length > 0) body.uploads = uploads;
@@ -1323,7 +1322,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                 maxCharsWarningMessage={props.textInput?.maxCharsWarningMessage}
                 autoFocus={props.textInput?.autoFocus}
                 fontSize={props.fontSize}
-                disabled={getInputDisabled()}
+                //              disabled={getInputDisabled()}
                 defaultValue={userInput()}
                 onSubmit={handleSubmit}
                 uploadsConfig={uploadsConfig()}
