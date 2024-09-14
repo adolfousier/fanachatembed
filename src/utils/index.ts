@@ -21,7 +21,6 @@ export const sendRequest = async <ResponseData>(
     const url = typeof params === 'string' ? params : params.url;
     const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
-      mode: 'cors',
       body:
         typeof params !== 'string' && isDefined(params.body)
           ? params.body instanceof FormData

@@ -1322,7 +1322,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                 maxCharsWarningMessage={props.textInput?.maxCharsWarningMessage}
                 autoFocus={props.textInput?.autoFocus}
                 fontSize={props.fontSize}
-                //              disabled={getInputDisabled()}
+                //disabled={getInputDisabled()}
                 defaultValue={userInput()}
                 onSubmit={handleSubmit}
                 uploadsConfig={uploadsConfig()}
