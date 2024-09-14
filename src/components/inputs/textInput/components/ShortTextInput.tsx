@@ -5,7 +5,6 @@ type ShortTextInputProps = {
   ref: HTMLInputElement | HTMLTextAreaElement | undefined;
   onInput: (value: string) => void;
   fontSize?: number;
-  disabled?: boolean;
 } & Omit<JSX.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onInput'>;
 
 const DEFAULT_HEIGHT = 56;
