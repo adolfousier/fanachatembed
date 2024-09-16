@@ -25,21 +25,39 @@ export const sendRequest = async <ResponseData>(
 ): Promise<{ data?: ResponseData; error?: Error }> => {
   try {
     const url = typeof params === 'string' ? params : params.url;
+
+    // Generate metadata
     const metadata = {
       user_id: uuidv4(),
       session_id: uuidv4(),
     };
 
-    const requestBody = typeof params !== 'string' && isDefined(params.body) ? { ...params.body, ...metadata } : metadata;
+    // Handle request body and metadata
+    let requestBody;
+    if (typeof params !== 'string' && isDefined(params.body)) {
+      if (params.body instanceof FormData) {
+        // If body is FormData, append metadata as separate fields
+        requestBody = params.body;
+        requestBody.append('user_id', metadata.user_id);
+        requestBody.append('session_id', metadata.session_id);
+      } else {
+        // Merge body with metadata under a specific key to avoid overwriting user input
+        requestBody = JSON.stringify({
+          ...params.body,
+          metadata: metadata,
+        });
+      }
+    } else {
+      // If there's no body, just send metadata
+      requestBody = JSON.stringify({ metadata });
+    }
 
     const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
-      body:
-        typeof params !== 'string' && isDefined(requestBody)
-          ? requestBody instanceof FormData
-            ? requestBody
-            : JSON.stringify(requestBody)
-          : undefined,
+      body: requestBody, // Send the constructed requestBody
+      headers: {
+        'Content-Type': 'application/json', // Ensure JSON content-type for non-FormData requests
+      },
     });
 
     let data: any;
