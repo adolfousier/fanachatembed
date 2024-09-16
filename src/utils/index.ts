@@ -16,6 +16,10 @@ export const sendRequest = async <ResponseData>(
         body?: Record<string, unknown> | FormData;
         type?: string;
         onRequest?: (request: RequestInit) => Promise<void>;
+        metadata?: {
+          user_id: string;
+          session_id: string;
+        };
       }
     | string,
 ): Promise<{ data?: ResponseData; error?: Error }> => {

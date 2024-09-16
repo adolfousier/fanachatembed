@@ -8,6 +8,10 @@ export declare const sendRequest: <ResponseData>(params: string | {
     body?: Record<string, unknown> | FormData | undefined;
     type?: string | undefined;
     onRequest?: ((request: RequestInit) => Promise<void>) | undefined;
+    metadata?: {
+        user_id: string;
+        session_id: string;
+    } | undefined;
 }) => Promise<{
     data?: ResponseData | undefined;
     error?: Error | undefined;
