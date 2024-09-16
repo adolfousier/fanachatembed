@@ -21,13 +21,12 @@ export const sendRequest = async <ResponseData>(
 ): Promise<{ data?: ResponseData; error?: Error }> => {
   try {
     const url = typeof params === 'string' ? params : params.url;
-    const userId = uuidv4();
-    const sessionId = uuidv4();
+    const metadata = {
+      user_id: uuidv4(),
+      session_id: uuidv4(),
+    };
 
-    const requestBody =
-      typeof params !== 'string' && isDefined(params.body)
-        ? { ...params.body, user_id: userId, session_id: sessionId }
-        : { user_id: userId, session_id: sessionId };
+    const requestBody = typeof params !== 'string' && isDefined(params.body) ? { ...params.body, ...metadata } : metadata;
 
     const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
