@@ -32,32 +32,35 @@ export const sendRequest = async <ResponseData>(
       session_id: uuidv4(),
     };
 
-    // Handle request body and metadata
-    let requestBody;
+    let requestBody: FormData | string | undefined;
+
     if (typeof params !== 'string' && isDefined(params.body)) {
       if (params.body instanceof FormData) {
-        // If body is FormData, append metadata as separate fields
+        // If the body is FormData, append metadata fields to FormData
         requestBody = params.body;
         requestBody.append('user_id', metadata.user_id);
         requestBody.append('session_id', metadata.session_id);
       } else {
-        // Merge body with metadata under a specific key to avoid overwriting user input
+        // If it's not FormData, merge body with metadata (for JSON)
         requestBody = JSON.stringify({
           ...params.body,
           metadata: metadata,
         });
       }
     } else {
-      // If there's no body, just send metadata
+      // If there's no body, just send metadata (for JSON)
       requestBody = JSON.stringify({ metadata });
     }
 
     const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
       body: requestBody, // Send the constructed requestBody
-      headers: {
-        'Content-Type': 'application/json', // Ensure JSON content-type for non-FormData requests
-      },
+      headers:
+        typeof params !== 'string' && params.body instanceof FormData
+          ? undefined // Let the browser set Content-Type for FormData
+          : {
+              'Content-Type': 'application/json', // Set Content-Type only for JSON requests
+            },
     });
 
     let data: any;
