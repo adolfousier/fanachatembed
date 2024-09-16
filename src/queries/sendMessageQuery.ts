@@ -95,7 +95,7 @@ export const upsertVectorStoreWithFormData = ({ chatflowid, apiHost = 'http://lo
 export const getChatbotConfig = ({ chatflowid, apiHost = 'http://localhost:3000', onRequest }: MessageRequest) =>
   sendRequest<any>({
     method: 'GET',
-    url: `${apiHost}/api/v1/public-chatbotConfig/${chatflowid}`,
+    url: `${apiHost}/api/prediction/interact/public-chatbotConfig/${chatflowid}`,
     onRequest: onRequest,
   });
 
