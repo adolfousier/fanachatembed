@@ -93,6 +93,7 @@ export const BubbleButton = (props: Props) => {
         style={{
           'background-color': props.backgroundColor ?? defaultButtonColor,
           'z-index': 42424242,
+          'border-bottom-left-radius': '60px',
           right: `${position().right}px`,
           bottom: `${position().bottom}px`,
           width: `${buttonSize}px`,
