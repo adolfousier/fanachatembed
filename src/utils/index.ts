@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const isNotDefined = <T>(value: T | undefined | null): value is undefined | null => value === undefined || value === null;
 
 export const isDefined = <T>(value: T | undefined | null): value is NonNullable<T> => value !== undefined && value !== null;
@@ -19,15 +21,23 @@ export const sendRequest = async <ResponseData>(
 ): Promise<{ data?: ResponseData; error?: Error }> => {
   try {
     const url = typeof params === 'string' ? params : params.url;
+    const metadata = {
+      user_id: uuidv4(),
+      session_id: uuidv4(),
+    };
+
+    const requestBody = typeof params !== 'string' && isDefined(params.body) ? { ...params.body, ...metadata } : metadata;
+
     const response = await fetch(url, {
       method: typeof params === 'string' ? 'GET' : params.method,
       body:
-        typeof params !== 'string' && isDefined(params.body)
-          ? params.body instanceof FormData
-            ? params.body
-            : JSON.stringify(params.body)
+        typeof params !== 'string' && isDefined(requestBody)
+          ? requestBody instanceof FormData
+            ? requestBody
+            : JSON.stringify(requestBody)
           : undefined,
     });
+
     let data: any;
     const contentType = response.headers.get('Content-Type');
     if (contentType && contentType.includes('application/json')) {
